@@ -28,12 +28,7 @@ export default class MouseTouch {
 	}
 
 	on(eventType, fn) {
-		if (eventType != 'mousemove' &&
-			eventType != 'mousedown' &&
-			eventType != 'mouseup' &&
-			eventType != 'click' &&
-			eventType != 'dblclick') {
-			
+		if (!validEventType(eventType)) {
 			throw new Error(`Unrecognized event type "${eventType}" passed to MouseInteractions registerer`);
 		}
 
@@ -45,12 +40,7 @@ export default class MouseTouch {
 	}
 
 	off(eventType, fn = null) {
-		if (eventType != 'mousemove' &&
-			eventType != 'mousedown' &&
-			eventType != 'mouseup' &&
-			eventType != 'click' &&
-			eventType != 'dblclick') {
-			
+		if (!validEventType(eventType)) {
 			throw new Error(`Unrecognized event "${eventType}" passed to MouseInteractions deregisterer`);
 		}
 
@@ -81,7 +71,7 @@ export default class MouseTouch {
 	/* private */
 
 	dispatch(eventType, event) {
-		if (!this.dispatchers[eventType]) { return; }
+		if (!event || !this.dispatchers[eventType]) { return; }
 
 		for (let fn of this.dispatchers[eventType]) {
 			fn(normalizeEvent(event, this.offset));
@@ -106,6 +96,9 @@ export default class MouseTouch {
 	};
 
 	touchend = (e) => {
+
+		this.dispatch('mouseup', this.srcEvent);
+
 		if (this.lastDownAt && time() - this.lastDownAt < this.clickThreshold) {
 
 			this.dispatch('click', this.srcEvent);
@@ -117,8 +110,6 @@ export default class MouseTouch {
 				this.lastClickAt = time();
 			}
 		}
-
-		this.dispatch('mouseup', this.srcEvent);
 	};
 
 	touchcancel = (e) => {
@@ -165,6 +156,17 @@ function time() {
 	return (new Date()).getTime();
 }
 
+function validEventType(eventType) {
+	return (
+		eventType == 'mousemove' ||
+		eventType == 'mousedown' ||
+		eventType == 'mouseup' ||
+		eventType == 'click' ||
+		eventType == 'dblclick'
+	);
+}
+
+// TODO adjust for scaling and rotation
 function getElementOffset(element) {
 
 	let offset = {
@@ -172,9 +174,9 @@ function getElementOffset(element) {
 		y: 0
 	};
 
-	while(element.offsetParent) {
-		offset.x -= element.offsetLeft - element.scrollLeft;
-		offset.y -= element.offsetTop - element.scrollTop;
+	while (element.offsetParent) {
+		offset.x += element.offsetLeft - element.scrollLeft;
+		offset.y += element.offsetTop - element.scrollTop;
 	
 		element = element.offsetParent;
 	}
