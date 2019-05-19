@@ -7,4 +7,4 @@
  * Date: May 19, 2019
  */
  
- module.exports = require('./lib/Mousetouch').default;
+ module.exports = require('./lib/Mousetouch');

@@ -1,6 +1,6 @@
 {
 	"name": "mousetouch",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "A small library to provide consistent mouse and touch interactions.",
 	"author": "Jeff Seaman",
 	"contributors": [
