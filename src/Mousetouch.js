@@ -97,6 +97,8 @@ export default class MouseTouch {
 
 	touchend = (e) => {
 
+		if (this.touch) { this.touch = false; }
+
 		this.dispatch('mouseup', this.srcEvent);
 
 		if (this.lastDownAt && time() - this.lastDownAt < this.clickThreshold) {
@@ -166,7 +168,7 @@ function validEventType(eventType) {
 	);
 }
 
-// TODO adjust for scaling and rotation
+// TODO: adjust for scaling and rotation
 function getElementOffset(element) {
 
 	let offset = {

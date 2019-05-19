@@ -1,6 +1,6 @@
 {
 	"name": "mousetouch",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "A small library to provide consistent mouse and touch interactions.",
 	"author": "Jeff Seaman",
 	"contributors": [
@@ -9,43 +9,29 @@
 	"license": "MIT",
 	"main": "index.js",
 	"scripts": {
-		"prepare": "babel src -d lib"
+		"prepare": "rollup -c"
 	},
 	"babel": {
 		"plugins": [
-			"transform-runtime",
-			"transform-decorators-legacy",
-			[
-				"babel-plugin-transform-builtin-extend",
-				{
-					"globals": [
-						"Error",
-						"Array"
-					]
-				}
-			],
-			[
-				"babel-plugin-root-import",
-				{
-					"rootPathSuffix": "src/",
-					"rootPathPrefix": "~"
-				}
-			]
+			"@babel/plugin-proposal-class-properties"
 		],
 		"presets": [
-			"env",
-			"stage-2"
+			[
+				"@babel/preset-env",
+				{
+					"targets": {
+						"chrome": "60"
+					}
+				}
+			]
 		]
 	},
 	"devDependencies": {
-		"babel-cli": "^6.26.0",
-		"babel-plugin-root-import": "^6.1.0",
-		"babel-plugin-transform-builtin-extend": "^1.1.2",
-		"babel-plugin-transform-decorators-legacy": "^1.3.5",
-		"babel-plugin-transform-runtime": "^6.23.0",
-		"babel-preset-env": "^1.7.0",
-		"babel-preset-stage-2": "^6.24.1",
-		"copyfiles": "^2.1.0"
+		"@babel/core": "^7.4.4",
+		"@babel/plugin-proposal-class-properties": "^7.4.4",
+		"@babel/preset-env": "^7.4.4",
+		"rollup": "^1.12.3",
+		"rollup-plugin-babel": "^4.3.2"
 	},
 	"dependencies": {},
 	"repository": {

@@ -30,4 +30,4 @@ Feel free to make changes and submit pull requests whenever.
 
 
 ## License
-Electronbar uses the [MIT](https://opensource.org/licenses/MIT) license.
+Mousetouch uses the [MIT](https://opensource.org/licenses/MIT) license.
