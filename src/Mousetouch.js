@@ -79,16 +79,13 @@ export default class MouseTouch {
 	}
 
 	touchmove = (e) => {
-		if (!this.touch) { this.touch = true; }
-	
 		if (this.lastDownAt && time() - this.lastDownAt > this.clickThreshold) {
 			this.dispatch('mousemove', e);
 		}
 	};
 
 	touchstart = (e) => {
-		if (!this.touch) { this.touch = true; }
-	
+
 		this.lastDownAt = time();
 		this.srcEvent = e;
 
@@ -97,7 +94,8 @@ export default class MouseTouch {
 
 	touchend = (e) => {
 
-		if (this.touch) { this.touch = false; }
+		// prevent mouseclick from firing
+		e.preventDefault();
 
 		this.dispatch('mouseup', this.srcEvent);
 
@@ -119,36 +117,26 @@ export default class MouseTouch {
 	};
 
 	mousemove = (e) => {
-		if (!this.touch) {
-			if (this.lastDownAt && time() - this.lastDownAt > this.clickThreshold) {
-				this.dispatch('mousemove', e);
-			}
+		if (this.lastDownAt && time() - this.lastDownAt > this.clickThreshold) {
+			this.dispatch('mousemove', e);
 		}
 	};
 
 	mousedown = (e) => {
-		if (!this.touch) {
-			this.lastDownAt = time();
-			this.dispatch('mousedown', e);
-		}
+		this.lastDownAt = time();
+		this.dispatch('mousedown', e);
 	};
 
 	mouseup = (e) => {
-		if (!this.touch) {
-			this.dispatch('mouseup', e);
-		}
+		this.dispatch('mouseup', e);
 	};
 
 	click = (e) => {
-		if (!this.touch) {
-			this.dispatch('click', e);
-		}
+		this.dispatch('click', e);
 	};
 
 	dblclick = (e) => {
-		if (!this.touch) {
-			this.dispatch('dblclick', e);
-		}
+		this.dispatch('dblclick', e);
 	};
 }
 

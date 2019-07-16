@@ -1,6 +1,6 @@
 {
 	"name": "mousetouch",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "A small library to provide consistent mouse and touch interactions.",
 	"author": "Jeff Seaman",
 	"contributors": [
@@ -27,11 +27,11 @@
 		]
 	},
 	"devDependencies": {
-		"@babel/core": "^7.4.4",
-		"@babel/plugin-proposal-class-properties": "^7.4.4",
-		"@babel/preset-env": "^7.4.4",
-		"rollup": "^1.12.3",
-		"rollup-plugin-babel": "^4.3.2"
+		"@babel/core": "^7.5.4",
+		"@babel/plugin-proposal-class-properties": "^7.5.0",
+		"@babel/preset-env": "^7.5.4",
+		"rollup": "^1.17.0",
+		"rollup-plugin-babel": "^4.3.3"
 	},
 	"dependencies": {},
 	"repository": {
