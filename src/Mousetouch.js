@@ -86,6 +86,8 @@ export default class MouseTouch {
 
 	touchstart = (e) => {
 
+		this.touch = true;
+
 		this.lastDownAt = time();
 		this.srcEvent = e;
 
@@ -95,7 +97,10 @@ export default class MouseTouch {
 	touchend = (e) => {
 
 		// prevent mouseclick from firing
-		e.preventDefault();
+		if (this.touch) {
+			this.touch = false;
+			e.preventDefault();
+		}
 
 		this.dispatch('mouseup', this.srcEvent);
 
@@ -113,7 +118,7 @@ export default class MouseTouch {
 	};
 
 	touchcancel = (e) => {
-
+		this.touch = false;
 	};
 
 	mousemove = (e) => {
@@ -175,6 +180,11 @@ function getElementOffset(element) {
 }
 
 function normalizeEvent(event, offset) {
+
+	// touch events don't have buttons
+	if (event.button == null) {
+		event.button = 0;
+	}
 
 	if (event.offsetX != null && event.offsetY != null) {
 		return event;
