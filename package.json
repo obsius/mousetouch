@@ -1,13 +1,14 @@
 {
 	"name": "mousetouch",
-	"version": "1.1.4",
+	"version": "1.1.5",
 	"description": "A small library to provide consistent mouse and touch interactions.",
-	"author": "Jeff Seaman",
-	"contributors": [
-		"Jeff Seaman <mr.jeffrey.seaman@gmail.com> (https://www.ngc6822.com)"
-	],
+	"author": "Jeff Seaman <mr.jeffrey.seaman@gmail.com> (https://www.ngc6822.com)",
 	"license": "MIT",
-	"main": "index.js",
+	"main": "lib/index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/obsius/color-chooser.git"
+	},
 	"scripts": {
 		"prepare": "rollup -c"
 	},
@@ -27,17 +28,13 @@
 		]
 	},
 	"devDependencies": {
-		"@babel/core": "^7.5.4",
-		"@babel/plugin-proposal-class-properties": "^7.5.0",
-		"@babel/preset-env": "^7.5.4",
-		"rollup": "^1.17.0",
+		"@babel/core": "^7.8.3",
+		"@babel/plugin-proposal-class-properties": "^7.8.3",
+		"@babel/preset-env": "^7.8.3",
+		"rollup": "^1.29.0",
 		"rollup-plugin-babel": "^4.3.3"
 	},
 	"dependencies": {},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/obsius/mousetouch.git"
-	},
 	"keywords": [
 		"mouse",
 		"touch",

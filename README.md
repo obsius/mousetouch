@@ -1,12 +1,14 @@
 # Mousetouch
 
-Mousetouch is a small, lightweight library to provide consistent mouse and touch interactions. It only support touch interactions that can be done with the mouse also.
-
+Mousetouch is a small, lightweight library to provide consistent mouse and touch interactions.
+It only support touch interactions that can be done with the mouse also.
 
 ## Integrating
+
 Mousetouch has defined defaults and can be used by constructing it.
 
 ### Reference
+
 ```js
 import Mousetouch from 'mousetouch';
 const Mousetouch = require('mousetouch');
@@ -23,7 +25,6 @@ mousetouch.on('mouseup', (e) => {});
 mousetouch.on('click', (e) => {});
 mousetouch.on('dblclick', (e) => {});
 ```
-
 
 ## Contributing
 Feel free to make changes and submit pull requests whenever.

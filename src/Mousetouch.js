@@ -79,7 +79,7 @@ export default class MouseTouch {
 	}
 
 	touchmove = (e) => {
-		if (this.lastDownAt && time() - this.lastDownAt > this.clickThreshold) {
+		if (this.lastDownAt && Date.now() - this.lastDownAt > this.clickThreshold) {
 			this.dispatch('mousemove', e);
 		}
 	};
@@ -88,7 +88,7 @@ export default class MouseTouch {
 
 		this.touch = true;
 
-		this.lastDownAt = time();
+		this.lastDownAt = Date.now();
 		this.srcEvent = e;
 
 		this.dispatch('mousedown', e);
@@ -104,15 +104,15 @@ export default class MouseTouch {
 
 		this.dispatch('mouseup', this.srcEvent);
 
-		if (this.lastDownAt && time() - this.lastDownAt < this.clickThreshold) {
+		if (this.lastDownAt && Date.now() - this.lastDownAt < this.clickThreshold) {
 
 			this.dispatch('click', this.srcEvent);
 
-			if (this.lastClickAt && time() - this.lastClickAt < this.dblClickThreshold) {
+			if (this.lastClickAt && Date.now() - this.lastClickAt < this.dblClickThreshold) {
 				this.lastClickAt = null;
 				this.dispatch('dblclick', this.srcEvent);
 			} else {
-				this.lastClickAt = time();
+				this.lastClickAt = Date.now();
 			}
 		}
 	};
@@ -122,13 +122,13 @@ export default class MouseTouch {
 	};
 
 	mousemove = (e) => {
-		if (this.lastDownAt && time() - this.lastDownAt > this.clickThreshold) {
+		if (!this.lastDownAt || (Date.now() - this.lastDownAt) > this.clickThreshold) {
 			this.dispatch('mousemove', e);
 		}
 	};
 
 	mousedown = (e) => {
-		this.lastDownAt = time();
+		this.lastDownAt = Date.now();
 		this.dispatch('mousedown', e);
 	};
 
@@ -146,10 +146,6 @@ export default class MouseTouch {
 }
 
 /* internals */
-
-function time() {
-	return (new Date()).getTime();
-}
 
 function validEventType(eventType) {
 	return (
