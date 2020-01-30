@@ -1,17 +1,23 @@
-const CLICK_THRESHOLD = 200;
-const DBLCLICK_THRESHOLD = 500;
-const MOVE_THRESHOLD = 2;
+const CLICK_THRESHOLD = 100;
+const DBLCLICK_THRESHOLD = 400;
+const MOVE_THRESHOLD = 4;
 
 export default class MouseTouch {
 
 	dispatchers = {};
 
+	lastDownAt = Date.now();
+
+	bufferPoint = new Point();
+	lastPoint = new Point();
+
 	constructor(element, options = {}) {
+
 		this.element = element;
 
 		this.clickThreshold = options.clickThreshold || CLICK_THRESHOLD;
 		this.dblClickThreshold = options.dblClickThreshold || DBLCLICK_THRESHOLD;
-		this.moveThreshold = options.moveThreshold || MOVE_THRESHOLD;
+		this.moveThresholdSq = (options.moveThreshold || MOVE_THRESHOLD) ** 2;
 
 		this.offset = getElementOffset(element);
 
@@ -28,6 +34,7 @@ export default class MouseTouch {
 	}
 
 	on(eventType, fn) {
+
 		if (!validEventType(eventType)) {
 			throw new Error(`Unrecognized event type "${eventType}" passed to MouseInteractions registerer`);
 		}
@@ -40,6 +47,7 @@ export default class MouseTouch {
 	}
 
 	off(eventType, fn = null) {
+
 		if (!validEventType(eventType)) {
 			throw new Error(`Unrecognized event "${eventType}" passed to MouseInteractions deregisterer`);
 		}
@@ -54,6 +62,7 @@ export default class MouseTouch {
 	}
 
 	destroy() {
+
 		this.dispatchers = {};
 
 		window.removeEventListener('touchend', this.touchend);
@@ -70,7 +79,12 @@ export default class MouseTouch {
 
 	/* private */
 
+	computePoint(e) {
+		this.bufferPoint.set(e.offsetX, e.offsetY);
+	}
+
 	dispatch(eventType, event) {
+
 		if (!event || !this.dispatchers[eventType]) { return; }
 
 		for (let fn of this.dispatchers[eventType]) {
@@ -79,7 +93,7 @@ export default class MouseTouch {
 	}
 
 	touchmove = (e) => {
-		if (this.lastDownAt && Date.now() - this.lastDownAt > this.clickThreshold) {
+		if (Date.now() - this.lastDownAt > this.clickThreshold) {
 			this.dispatch('mousemove', e);
 		}
 	};
@@ -104,11 +118,11 @@ export default class MouseTouch {
 
 		this.dispatch('mouseup', this.srcEvent);
 
-		if (this.lastDownAt && Date.now() - this.lastDownAt < this.clickThreshold) {
+		if (Date.now() - this.lastDownAt < this.clickThreshold) {
 
 			this.dispatch('click', this.srcEvent);
 
-			if (this.lastClickAt && Date.now() - this.lastClickAt < this.dblClickThreshold) {
+			if (this.lastClickAt && (Date.now() - this.lastClickAt) < this.dblClickThreshold) {
 				this.lastClickAt = null;
 				this.dispatch('dblclick', this.srcEvent);
 			} else {
@@ -122,13 +136,18 @@ export default class MouseTouch {
 	};
 
 	mousemove = (e) => {
-		if (!this.lastDownAt || (Date.now() - this.lastDownAt) > this.clickThreshold) {
+		if (Date.now() - this.lastDownAt > this.clickThreshold) {
 			this.dispatch('mousemove', e);
 		}
 	};
 
 	mousedown = (e) => {
+
+		this.computePoint(e);
+
 		this.lastDownAt = Date.now();
+		this.lastPoint.copy(this.bufferPoint);
+
 		this.dispatch('mousedown', e);
 	};
 
@@ -137,15 +156,46 @@ export default class MouseTouch {
 	};
 
 	click = (e) => {
-		this.dispatch('click', e);
+
+		this.computePoint(e);
+
+		if (this.lastPoint.distanceSq(this.bufferPoint) < this.moveThresholdSq) {
+			this.dispatch('click', e);
+		}
 	};
 
 	dblclick = (e) => {
-		this.dispatch('dblclick', e);
+
+		this.computePoint(e);
+
+		if (this.lastPoint.distanceSq(this.bufferPoint) < this.moveThresholdSq) {
+			this.dispatch('dblclick', e);
+		}
 	};
 }
 
 /* internals */
+
+class Point {
+	constructor(x, y) {
+		this.x = x || 0;
+		this.y = y || 0;
+	}
+
+	copy(point) {
+		this.x = point.x;
+		this.y = point.y;
+	}
+
+	distanceSq(point) {
+		return (this.x - point.x) ** 2 + (this.y - point.y) ** 2;
+	}
+
+	set(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+}
 
 function validEventType(eventType) {
 	return (
@@ -160,10 +210,7 @@ function validEventType(eventType) {
 // TODO: adjust for scaling and rotation
 function getElementOffset(element) {
 
-	let offset = {
-		x: 0,
-		y: 0
-	};
+	let offset = new Point();
 
 	while (element.offsetParent) {
 		offset.x += element.offsetLeft - element.scrollLeft;
