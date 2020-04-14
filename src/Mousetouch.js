@@ -22,7 +22,7 @@ export default class MouseTouch {
 		this.offset = getElementOffset(element);
 
 		window.addEventListener('touchend', this.touchend, false);
-		window.addEventListener('touchcancel', this.touchend, false);
+		window.addEventListener('touchcancel', this.touchcancel, false);
 		window.addEventListener('mouseup', this.mouseup, false);
 
 		element.addEventListener('touchmove', this.touchmove, false);
@@ -62,9 +62,6 @@ export default class MouseTouch {
 	}
 
 	destroy() {
-		
-		this.element = null;
-		this.dispatchers = null;
 
 		window.removeEventListener('touchend', this.touchend);
 		window.removeEventListener('touchcancel', this.touchcancel);
@@ -76,6 +73,9 @@ export default class MouseTouch {
 		this.element.removeEventListener('mousedown', this.mousedown);
 		this.element.removeEventListener('click', this.click);
 		this.element.removeEventListener('dblclick', this.dblclick);
+
+		this.element = null;
+		this.dispatchers = null;
 	}
 
 	/* private */
