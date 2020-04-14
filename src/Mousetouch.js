@@ -62,11 +62,12 @@ export default class MouseTouch {
 	}
 
 	destroy() {
-
-		this.dispatchers = {};
+		
+		this.element = null;
+		this.dispatchers = null;
 
 		window.removeEventListener('touchend', this.touchend);
-		window.removeEventListener('touchcancel', this.touchend);
+		window.removeEventListener('touchcancel', this.touchcancel);
 		window.removeEventListener('mouseup', this.mouseup);
 
 		this.element.removeEventListener('touchmove', this.touchmove);
