@@ -1,6 +1,6 @@
 {
 	"name": "mousetouch",
-	"version": "1.1.11",
+	"version": "1.1.12",
 	"description": "A small library to provide consistent mouse and touch interactions.",
 	"homepage": "https://github.com/obsius/mousetouch",
 	"author": "Jeff Seaman <mr.jeffrey.seaman@gmail.com> (https://www.ngc6822.com)",
@@ -25,10 +25,10 @@
 		]
 	},
 	"devDependencies": {
-		"@babel/core": "^7.9.0",
+		"@babel/core": "^7.9.6",
 		"@babel/plugin-proposal-class-properties": "^7.8.3",
-		"@babel/preset-env": "^7.9.5",
-		"rollup": "^2.6.1",
+		"@babel/preset-env": "^7.9.6",
+		"rollup": "^2.8.0",
 		"rollup-plugin-babel": "^4.4.0"
 	},
 	"dependencies": {},
