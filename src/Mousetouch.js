@@ -30,6 +30,7 @@ export default class MouseTouch {
 		element.addEventListener('mousemove', this.mousemove, false);
 		element.addEventListener('mousedown', this.mousedown, false);
 		element.addEventListener('click', this.click, false);
+		element.addEventListener('auxclick', this.click, false);
 		element.addEventListener('dblclick', this.dblclick, false);
 	}
 
@@ -72,6 +73,7 @@ export default class MouseTouch {
 		this.element.removeEventListener('mousemove', this.mousemove);
 		this.element.removeEventListener('mousedown', this.mousedown);
 		this.element.removeEventListener('click', this.click);
+		this.element.removeEventListener('auxclick', this.click);
 		this.element.removeEventListener('dblclick', this.dblclick);
 
 		this.element = null;
