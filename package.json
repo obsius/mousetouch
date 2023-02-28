@@ -1,6 +1,6 @@
 {
 	"name": "mousetouch",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "A small library to provide consistent mouse and touch interactions.",
 	"homepage": "https://github.com/obsius/mousetouch",
 	"author": "Jeff Seaman <mr.jeffrey.seaman@gmail.com> (https://www.ngc6822.com)",
