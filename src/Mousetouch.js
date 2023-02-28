@@ -34,6 +34,28 @@ export default class MouseTouch {
 		element.addEventListener('dblclick', this.dblclick, false);
 	}
 
+	destroy() {
+
+		window.removeEventListener('touchend', this.touchend);
+		window.removeEventListener('touchcancel', this.touchcancel);
+		window.removeEventListener('mouseup', this.mouseup);
+
+		this.element.removeEventListener('touchmove', this.touchmove);
+		this.element.removeEventListener('touchstart', this.touchstart);
+		this.element.removeEventListener('mousemove', this.mousemove);
+		this.element.removeEventListener('mousedown', this.mousedown);
+		this.element.removeEventListener('click', this.click);
+		this.element.removeEventListener('auxclick', this.click);
+		this.element.removeEventListener('dblclick', this.dblclick);
+
+		this.element = null;
+		this.dispatchers = null;
+	}
+
+	update() {
+		this.offset = getElementOffset(this.element);
+	}
+
 	on(eventType, fn) {
 
 		if (!validEventType(eventType)) {
@@ -62,24 +84,6 @@ export default class MouseTouch {
 		}
 	}
 
-	destroy() {
-
-		window.removeEventListener('touchend', this.touchend);
-		window.removeEventListener('touchcancel', this.touchcancel);
-		window.removeEventListener('mouseup', this.mouseup);
-
-		this.element.removeEventListener('touchmove', this.touchmove);
-		this.element.removeEventListener('touchstart', this.touchstart);
-		this.element.removeEventListener('mousemove', this.mousemove);
-		this.element.removeEventListener('mousedown', this.mousedown);
-		this.element.removeEventListener('click', this.click);
-		this.element.removeEventListener('auxclick', this.click);
-		this.element.removeEventListener('dblclick', this.dblclick);
-
-		this.element = null;
-		this.dispatchers = null;
-	}
-
 	/* private */
 
 	computePoint(e) {
@@ -91,7 +95,7 @@ export default class MouseTouch {
 		if (!event || !this.dispatchers[eventType]) { return; }
 
 		for (let fn of this.dispatchers[eventType]) {
-			fn(normalizeEvent(event, this.offset));
+			fn(wrapEvent(event, this.offset));
 		}
 	}
 
@@ -225,22 +229,18 @@ function getElementOffset(element) {
 	return offset;
 }
 
-function normalizeEvent(event, offset) {
+function wrapEvent(event, offset) {
 
-	// touch events don't have buttons
+	// touch events do not have buttons
 	if (event.button == null) {
 		event.button = 0;
 	}
 
-	if (event.offsetX != null && event.offsetY != null) {
-		return event;
-	}
-	
-	event.offsetX = event.targetTouches ? event.targetTouches[0].pageX : event.clientX;
-	event.offsetY = event.targetTouches ? event.targetTouches[0].pageY : event.clientY;
+	let x = event.offsetX == null ? (event.targetTouches ? event.targetTouches[0].pageX : event.clientX) : event.offsetX;
+	let y = event.offsetY == null ? (event.targetTouches ? event.targetTouches[0].pageY : event.clientY) : event.offsetY;
 
-	event.offsetX -= offset.x;
-	event.offsetY -= offset.y;
+	x -= offset.x;
+	y -= offset.y;
 
-	return event;
+	return { x, y, event };
 }

@@ -9,6 +9,15 @@ Mousetouch has defined defaults and can be used by constructing it.
 
 ### Reference
 
+Events fired are of the format:
+```js
+{
+	x: '<number>',
+	y: '<number>',
+	event: '<original event>'
+}
+```
+
 ```js
 import Mousetouch from 'mousetouch';
 const Mousetouch = require('mousetouch');
@@ -19,7 +28,7 @@ const mousetouch = new Mousetouch('<dom element to listen to>', {
 	moveThreshold: '<default 2px>'
 });
 
-mousetouch.on('mousemove', (e) => {});
+mousetouch.on('mousemove', (e) => { console.log(e) }); // { x, y, event }
 mousetouch.on('mousedown', (e) => {});
 mousetouch.on('mouseup', (e) => {});
 mousetouch.on('click', (e) => {});
@@ -28,7 +37,6 @@ mousetouch.on('dblclick', (e) => {});
 
 ## Contributing
 Feel free to make changes and submit pull requests whenever.
-
 
 ## License
 Mousetouch uses the [MIT](https://opensource.org/licenses/MIT) license.
