@@ -236,11 +236,16 @@ function wrapEvent(event, offset) {
 		event.button = 0;
 	}
 
-	let x = event.offsetX == null ? (event.targetTouches ? event.targetTouches[0].pageX : event.clientX) : event.offsetX;
-	let y = event.offsetY == null ? (event.targetTouches ? event.targetTouches[0].pageY : event.clientY) : event.offsetY;
+	let x;
+	let y;
 
-	x -= offset.x;
-	y -= offset.y;
+	if (event.offsetX != null && event.offsetY != null) {
+		x = event.offsetX;
+		y = event.offsetY;
+	} else {
+		x = (event.targetTouches ? event.targetTouches[0].pageX : event.clientX) - offset.x;
+		y = (event.targetTouches ? event.targetTouches[0].pageY : event.clientY) - offset.y;
+	}
 
 	return { x, y, event };
 }
